@@ -1,10 +1,19 @@
-const http = require('http');
-const url = require('url');
+const http = require('http')
+const https = require('https')
+const fs = require('fs')
+const url = require('url')
 const dbSettings = require('../config/dbSettings')
 const database = require('../classes/database')
 const port = 2000
 const getLevelsById = require('../methods/getLevelsById')
 const postLevelsById = require('../methods/postLevelsById')
+
+var httpOptions = {
+
+    key: fs.readFileSync("certificates/privatekey.pem"),
+    
+    cert: fs.readFileSync("certificates/certificate.pem")
+}
 
 http.createServer(async (request, response) => {
     request.on('error', (err) => {
@@ -53,7 +62,6 @@ http.createServer(async (request, response) => {
                 });
                 request.on('end', async function () {
                     try {
-                        console.log(body)
                         var postRequestJson = JSON.parse(body)
                     }
                     catch(err) {
